@@ -40,7 +40,19 @@ if( myMobile.any() ) {
   } else {
     document.body.classList.add('_pc');
   }
-
+  // Меню бургер
+  // Получаем наш объект
+  const iconMenu = document.querySelector('.menu__icon'); // ищем класс .menu__icon
+  const menuBody = document.querySelector('.menu__body');
+  // Делаем проверку есть ли у нас вообще такой класс))
+  if (iconMenu) {
+    // теперь создаю событие клик по иконке
+    iconMenu.addEventListener("click", function(e) {
+        document.body.classList.toggle('_lock'); // запрещаем скрол при открытом меню
+        iconMenu.classList.toggle('_active');
+        menuBody.classList.toggle('_active');
+    });
+  }
   // Прокрутка при клике
 
   const menuLinks = document.querySelectorAll('.menu__link[data-goto]');
@@ -54,6 +66,14 @@ if( myMobile.any() ) {
         if (menuLink.dataset.goto && document.querySelector(menuLink.dataset.goto)) {
             const gotoBlock = document.querySelector(menuLink.dataset.goto);
             const gotoBlockValue = gotoBlock.getBoundingClientRect().top + pageYOffset - document.querySelector('header').offsetHeight;
+
+            // Если обьект иконки меню содержит класс _active (фактически значит что меню открыто)
+            if (iconMenu.classList.contains('_active')) {
+                // то в этот момент мы должны сделать следующее
+                document.body.classList.remove('_lock'); // убираем классы которые мы добавляем при открытии меню
+                iconMenu.classList.remove('_active'); // убираем классы которые мы добавляем при открытии меню
+                menuBody.classList.remove('_active'); // убираем классы которые мы добавляем при открытии меню
+            }
 
             window.scrollTo({
                 top: gotoBlockValue,
